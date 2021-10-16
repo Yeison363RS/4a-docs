@@ -7,5 +7,5 @@ class GuideSerializer(serializers.ModelSerializer):
  #   account = AccountSerializer()
     class Meta:
         model = Guide
-        fields = ['id', 'email', 'password', 'name', 'surname',
+        fields = ['id', 'costo', 'password', 'name', 'surname',
          'telephone','score','name_agency','description','Facebook','instagram']

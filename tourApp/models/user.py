@@ -46,7 +46,7 @@ class Tourist(User):
      nacionality = models.CharField('Nacionality', max_length = 30)
 
 class Guide(User):
-     score = models.IntegerField('Score',max_length=4,default=1)
+     score = models.IntegerField('Score',default=1)
      name_agency = models.CharField('NameAgency', max_length = 30)
      description = models.CharField('Description', max_length = 450)
      facebook = models.CharField('Facebook', max_length = 450)
