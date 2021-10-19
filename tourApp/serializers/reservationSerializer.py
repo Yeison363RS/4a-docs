@@ -14,8 +14,8 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = ['id', 'time', 'numberHours', 'tour', 'tourist']
         
     def create(self, validated_data):
-        tourInstance = Tour.objects.get(id=validated_data.pop('idTour'))  
-        touristInstance = Tourist.objects.get(id=validated_data.pop('idTourist'))
+        tourInstance = Tour.objects.get(id=validated_data.pop('tour'))  
+        touristInstance = Tourist.objects.get(id=validated_data.pop('tourist'))
         reservationInstance = Reservation.objects.create(tour=tourInstance, 
         tourist=touristInstance, **validated_data)
         return reservationInstance
@@ -32,12 +32,13 @@ class ReservationSerializer(serializers.ModelSerializer):
                 'tourist': {
                 'id': tourist.id,
                 'name': tourist.name,
-                'surname': tourist.surname,
+                'surname': tourist.surename,
                 'telephone': tourist.telephone,
                 'nacionality': tourist.nacionality                   
                 },
                 'tour': {
                 'id': tour.id,
+                'title': tour.title,
                 'costo': tour.costo,
                 'description': tour.description,
                 'typeTour': tour.typeTour,

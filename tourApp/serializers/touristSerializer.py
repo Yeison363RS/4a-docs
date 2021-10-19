@@ -7,5 +7,5 @@ class TouristSerializer(serializers.ModelSerializer):
  #   account = AccountSerializer()
     class Meta:
         model = Tourist
-        fields = ['id', 'email', 'password', 'name', 'surname',
+        fields = ['id', 'email', 'password', 'name', 'surename',
          'telephone','placeResidence','nacionality']

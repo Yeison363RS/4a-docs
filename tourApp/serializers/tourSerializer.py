@@ -6,17 +6,22 @@ from tourApp.serializers.guideSerializer import GuideSerializer
 from tourApp.serializers.placeSerializer import PlaceSerializer
 
 class TourSerializer(serializers.ModelSerializer):
-    guide = GuideSerializer()
-    place = PlaceSerializer()
+    #guide = GuideSerializer()
+    #place = PlaceSerializer()
 
     class Meta:
         model = Tour
-        fields = ['id', 'costo', 'description', 'typeTour', 'guide',
-         'place']
+        fields = ['id','title', 'costo', 'description', 'typeTour','place','guide']
         
     def create(self, validated_data):
-        guideInstance = Guide.objects.get(id=validated_data.pop('idGuide'))  
-        placeInstance = Place.objects.get(id=validated_data.pop('idPlace'))
+        print("VA CREAR INSTANCIAS")
+        datasguide=validated_data.pop('guide')
+        datasplace=validated_data.pop('place')
+        print(datasguide)
+        print(datasplace)
+        guideInstance = Guide.objects.get(id=datasguide)  
+        placeInstance = Place.objects.get(id=datasplace)
+        print("VA A CONSTRUIR")
         tourInstance = Tour.objects.create(guide=guideInstance, 
         place=placeInstance, **validated_data)
         return tourInstance
@@ -27,13 +32,14 @@ class TourSerializer(serializers.ModelSerializer):
         place = Place.objects.get(id=tour.place)
         return {
                 'id': tour.id,
+                'title': tour.title,
                 'costo': tour.costo,
                 'description': tour.description,
                 'typeTour': tour.typeTour,
                 'guide': {
                 'id': guide.id,
                 'name': guide.name,
-                'surname': guide.surname,
+                'surename': guide.surname,
                 'telephone': guide.telephone
                 },
                 'place': {

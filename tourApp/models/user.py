@@ -30,7 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Email', max_length = 100, unique=True)
     password = models.CharField('Password', max_length = 256)
     name = models.CharField('Name', max_length = 30)
-    surname = models.CharField('SureName', max_length = 30)
+    surename = models.CharField('SureName', max_length = 30)
     telephone = models.CharField('Telephone', max_length = 30)
 
     def save(self, **kwargs):
