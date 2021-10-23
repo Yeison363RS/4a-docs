@@ -32,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField('Name', max_length = 30)
     surename = models.CharField('SureName', max_length = 30)
     telephone = models.CharField('Telephone', max_length = 30)
+    type_user = models.CharField('TypeUser', max_length = 1)
 
     def save(self, **kwargs):
         some_salt = 'mMUj0DrIK6vgtdIYepkIxN'

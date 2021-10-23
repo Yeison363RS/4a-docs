@@ -8,4 +8,4 @@ class TouristSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tourist
         fields = ['id', 'email', 'password', 'name', 'surename',
-         'telephone','placeResidence','nacionality']
+         'telephone','type_user','placeResidence','nacionality']
