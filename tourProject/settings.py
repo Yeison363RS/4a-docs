@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-ehs8s^(z2in!kv9wtsx28&@kt)a*!zq=#ztal17!rqxb129(lb
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'tourApp',
+    'corsheaders',
 ]
 
 SIMPLE_JWT = {
@@ -63,6 +65,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+CORS_ALLOWED_ORIGINS = [
+ "https://example.com",
+ "https://sub.example.com",
+ "http://localhost:8080",
+ "http://127.0.0.1:9000",
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' :(
