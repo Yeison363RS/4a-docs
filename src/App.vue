@@ -65,7 +65,7 @@ export default {
       
       let token = localStorage.getItem("token_access");
       let userId = jwt_decode(token).user_id.toString();
-      axios.get(`http://127.0.0.1:8000/user/${userId}/`, {
+      axios.get(`https://tourguide-be.herokuapp.com/user/${userId}/`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((result) => {

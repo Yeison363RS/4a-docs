@@ -1,8 +1,5 @@
 <template>
 <div id="prin">
-    <div>
-        <!--<img src="@/assets/playa.jpg">-->
-    </div>
     <h2 class="titleTable">Buscador de Tours</h2>
     <div class="divpanesearch">
     <button v-on:click="chargeTours" class="btnSearch">Buscar</button>
@@ -47,7 +44,7 @@ export default {
     },
     methods: {
         chargeTours: function(){
-             axios.get(`http://127.0.0.1:8000/all_tours/`,
+             axios.get(`https://tourguide-be.herokuapp.com/all_tours/`,
               {headers: {}})
                 .then((result) => {
                     this.datas = result.data;

@@ -72,14 +72,15 @@ a {
 
 button {
     border-radius: 20px;
-    border: 1px solid #607686;
+    border: 1px solid #FFF;
     background: #007367;
     color: #fff;
     font-size: 12px;
     font-weight: bold;
     padding: 12px 45px;
     letter-spacing: 1px;
-    text-transform: uppercase;
+    text-transform: uppercase;    
+    cursor:pointer;
     transition: transform 80ms ease-in;
 }
 
@@ -95,7 +96,9 @@ button.ghost {
     background: transparent;
     border-color: #fff;
 }
-
+button:hover {
+    background: #45CC98;
+}
 .form-container {
     position: absolute;
     top: 0;

@@ -22,7 +22,9 @@
   /**
    * Render the `main` element consistently in IE.
    */
-  
+   body {
+    margin: 0;
+  }
   main {
     display: block;
   }
@@ -36,7 +38,11 @@
     font-size: 2em;
     margin: 0.67em 0;
   }
-  
+  hr {
+    box-sizing: content-box; /* 1 */
+    height: 0; /* 1 */
+    overflow: visible; /* 2 */
+  }
   /* Grouping content
      ========================================================================== */
   
@@ -312,7 +318,9 @@
   summary {
     display: list-item;
   }
-  
+  template {
+    display: none;
+  }
   /* Misc
      ========================================================================== */
   

@@ -53,7 +53,7 @@ export default {
      data: function(){
             return {
                 isTourist:true,
-                urlCreate:"http://127.0.0.1:8000/tourist/",
+                urlCreate:"https://tourguide-be.herokuapp.com/tourist/",
                 user: {
                     email: "",
                     password: "",
@@ -102,12 +102,12 @@ export default {
         confirmTurist: function(){
         this.isTourist=true;
         this.user.type_user="T";
-        this.urlCreate="http://127.0.0.1:8000/tourist/";
+        this.urlCreate="https://tourguide-be.herokuapp.com/tourist/";
         },
         confirmGuide: function(){
         this.isTourist=false;
         this.user.type_user="G";
-        this.urlCreate="http://127.0.0.1:8000/guide/";
+        this.urlCreate="https://tourguide-be.herokuapp.com/guide/";
         }
         
     }

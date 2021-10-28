@@ -1,19 +1,26 @@
 <template>
     <div class="details">
-    <h3>{{title}}</h3>
-    <label>Valor del tour: {{costo}}</label>
-    <br>
-    <label>Descripcion del tour:</label>
-    <p>{{description}}</p>
-    <label>Tipo de turismo: {{typeTour}}</label>
-    <br>
-    <label>Lugar del tour: {{namePlace}}</label>
-    <br>
-    <label><strong> Informacion del guia</strong></label>
-    <br>
-    <label>Nombre: {{nameGuide}}</label>
-    <br>
-    <label>Numero telefonico: {{telephone}}</label>
+        <h2>{{title}}</h2>
+        <ul>       
+            <li><b>
+                Valor del tour: </b> <i>{{costo}}</i>
+            </li>
+        <div class="background-details">
+            <li><h3>Descripcion del tour</h3></li>
+            <ul>
+                <li><p>{{description}}</p></li>
+                <li>Tipo de turismo: <i>{{typeTour}}</i> </li>
+            </ul>
+        </div>
+
+        <div class="background-details">
+            <li><h3>Informacion del guia</h3></li>
+            <ul>
+                <li>Numero telefonico: <i>{{telephone}}</i> </li>
+                <li>Lugar del tour: <i>{{namePlace}}</i> </li>   
+            </ul>
+        </div>
+        </ul>
     <form v-on:submit.prevent="addReservation">
 
         <p> Seleccione fecha y hora de la reservacion:
@@ -24,9 +31,9 @@
             <br> 
             <input type="number" v-model="reservation.numberHours" >
         </p>
-        <input type="submit">
+        <button type="submit">Reservar</button>
     </form>
-    </div>
+</div>
 </template>
 <script>
 import axios from 'axios';
@@ -53,7 +60,7 @@ export default {
     methods:{
         chargeTour: function () {
         let idTour = localStorage.getItem("idTour");
-        axios.get(`http://127.0.0.1:8000/tour/${idTour}/`, {
+        axios.get(`https://tourguide-be.herokuapp.com/tour/${idTour}/`, {
             headers: {},
             })
             .then((result) => {
@@ -96,5 +103,6 @@ export default {
 <style>
 .details{
     background: #CCB378;
+    color:#000;
 }
 </style>

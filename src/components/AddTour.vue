@@ -1,41 +1,66 @@
 <template>
-  <form v-on:submit.prevent="processCreateTour">
-    <input type="text" v-model="tour.title" placeholder="Titulo del tour" />
-    <input
-      type="text"
-      v-model="tour.description"
-      placeholder="Descripcion del Tour"
-    />
-    <input type="number" v-model="tour.costo" placeholder="Costo del tour" />
-    <h4>{{ nameP }}</h4>
-    <select name="Tipo de turismo" v-model="tour.typeTour">
-      <option value="Extremo">Extremo</option>
-      <option value="Tradicional">Tradicional</option>
-      <option value="Regular">Regular</option>
-      <option value="Natural">Natural</option>
-    </select>
-    <button type="submit">Agregar tour</button>
-  </form>
-  <div id="seachPlace">
-        <button v-on:click="chargePlaces">Buscar lugares</button>
-      <table v-if="loaded">
-        <thead>
-          <tr>
-            <th>Nombre Lugar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="plac in datas" :key="plac.id">
-            <td @click="SelectionPlace(plac)">{{ plac.namePlace }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  <br>
-  <form v-on:submit.prevent="processcreatePlace">
-    <input type="text" v-model="place.namePlace" placeholder="Nombre lugar" />
-    <button type="submit">Agregar Lugar</button>
-  </form>
+  <article id="structure">
+        <form v-on:submit.prevent="processCreateTour">
+            <div id="main">
+                <div id = "form">
+                    <input type="text" id="name" class="from-input" autocomplete="off" v-model="tour.title" placeholder=" "/>
+                    <label for="name" class="from-label">Titulo del tour</label>
+                </div>
+                <div id = "form">
+                    <input type="text" id="name" class="from-input" autocomplete="off" v-model="tour.description" placeholder=" "/>
+                    <label for="name" class="from-label">Descripcion del tour</label>
+                </div>
+                <div id = "form">
+                    <input type="number" id="name" class="from-input" autocomplete="off" v-model="tour.costo"  placeholder=" "/>
+                    <label for="name" class="from-label">Descripcion del Tour</label>
+                </div>
+            </div>
+            
+            <div id="seccion">
+                <h3>{{ nameP }}</h3>
+                <div id="seccion-select">
+                    <select  name="Tipo de turismo" v-model="tour.typeTour">
+                        <option value="Extremo">Extremo</option>
+                        <option value="Tradicional">Tradicional</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Natural">Natural</option>
+                    </select>
+                    <button type="submit">Agregar tour</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <form v-on:submit.prevent="processcreatePlace">
+                <div id="seccion-placeName">
+                    <div id="form">
+                        <input type="text" id="name" class="from-input" v-model="place.namePlace" placeholder=" " />
+                        <label for="name" class="from-label">Nombre lugar</label>
+                    </div>
+                    <button type="submit" >Agregar Lugar</button>
+
+            </div>
+            <br>
+        </form>
+         <button id="button" v-on:click="chargePlaces">Buscar lugares</button>
+                
+            
+            <div id="table-all">
+                <table v-if="loaded" id="table">
+                <thead>
+                    <tr>
+                        <th>codigoLugar</th>
+                        <th>Nombre Lugar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="plac in datas" :key="plac.id">
+                        <td>{{ plac.id }}</td>
+                        <td @click="SelectionPlace(plac)">{{ plac.namePlace }}</td>
+                    </tr>
+                </tbody>
+                </table>
+              </div>
+    </article>
 </template>
 <script>
 import axios from "axios";
@@ -64,7 +89,7 @@ export default {
     processCreateTour: function () {
       this.tour.guide = localStorage.getItem("idUser");
       axios
-        .post("http://127.0.0.1:8000/c_tour/", this.tour, { headers: {} })
+        .post("https://tourguide-be.herokuapp.com/c_tour/", this.tour, { headers: {} })
         .then((result) => {
           if (result.data.confirm) {
             alert("El tour se ha guardado!!");
@@ -83,7 +108,7 @@ export default {
     },
     chargePlaces: function () {
       axios
-        .get(`http://127.0.0.1:8000/all_places/`, { headers: {} })
+        .get(`https://tourguide-be.herokuapp.com/all_places/`, { headers: {} })
         .then((result) => {
           this.datas = result.data;
           this.loaded = true;
@@ -94,7 +119,7 @@ export default {
     },
     processcreatePlace: function () {
       axios
-        .post("http://127.0.0.1:8000/c_place/", this.place, { headers: {} })
+        .post("https://tourguide-be.herokuapp.com/c_place/", this.place, { headers: {} })
         .then((result) => {
           if (result.data.confirm) {
             alert("El lugar se ha guardado!!");
