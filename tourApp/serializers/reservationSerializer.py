@@ -4,6 +4,7 @@ from tourApp.models.user import Tourist
 from tourApp.models.reservation import Reservation
 from tourApp.serializers.touristSerializer import TouristSerializer
 from tourApp.serializers.tourSerializer import TourSerializer
+from tourApp.models.user import Guide;
 
 class ReservationSerializer(serializers.ModelSerializer):
 
@@ -21,8 +22,8 @@ class ReservationSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         reservation = Reservation.objects.get(id=obj.id)
         tour = Tour.objects.get(id=obj.tour.id)
-        tourist = Tourist.objects.get(id=obj.tourist.id)      
-
+        tourist = Tourist.objects.get(id=obj.tourist.id)
+        guide =Guide.objects.get(id=tour.guide.id)      
         return {
                 'id': reservation.id,
                 'time': reservation.time,
@@ -40,6 +41,9 @@ class ReservationSerializer(serializers.ModelSerializer):
                     'costo': tour.costo,
                     'description': tour.description,
                     'typeTour': tour.typeTour,
-                }
+                    'guide':guide.id,
+                    'nameGuide':guide.name+" "+guide.surename,
+                    'telephone':guide.telephone                
+                    },
             }
             

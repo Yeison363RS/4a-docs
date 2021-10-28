@@ -1,20 +1,34 @@
 from django.conf import settings
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework_simplejwt.backends import TokenBackend
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import resolve_url
+from rest_framework import generics
 from tourApp.models.reservation import Reservation
 from tourApp.serializers.reservationSerializer import ReservationSerializer
 
 class ReservationDetailView(generics.RetrieveAPIView):
  queryset = Reservation.objects.all()
  serializer_class = ReservationSerializer
- #permission_classes = (IsAuthenticated,)
+
  def get(self, request, *args, **kwargs):
- #token = request.META.get('HTTP_AUTHORIZATION')[7:]
- #tokenBackend = TokenBackend(algorithm=settings.SIMPLE_JWT['ALGORITHM'])
-# valid_data = tokenBackend.decode(token,verify=False)
-# if valid_data['user_id'] != kwargs['pk']:
-# stringResponse = {'detail':'Unauthorized Request'}
-# return Response(stringResponse, status=status.HTTP_401_UNAUTHORIZED)
     return super().get(request, *args, **kwargs)
+
+class ReservationListDetailView(generics.ListAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        queryset=Reservation.objects.filter(tour__guide__id=self.kwargs['pk'])
+        return queryset
+
+class TouristReservationsView(generics.ListAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        queryset=Reservation.objects.filter(tourist_id=self.kwargs['pk'])
+        return queryset
+class ReservationDeleteView(generics.DestroyAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)

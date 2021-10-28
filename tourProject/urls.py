@@ -31,8 +31,13 @@ urlpatterns = [
  path('place/<int:pk>/', views.PlaceDetailView.as_view()),
  path('tour/<int:pk>/', views.TourDetailView.as_view()),
  path('reservation/<int:pk>/', views.ReservationDetailView.as_view()),
+ path('reservations/<int:pk>/', views.ReservationListDetailView.as_view()),
+ path('reservationsT/<int:pk>/', views.TouristReservationsView.as_view()),
+ path('deleteR/<int:pk>/', views.ReservationDeleteView.as_view()),
 
  path('all_tours/', views.AllToursDetailView.as_view()),
  path('all_places/', views.AllPlaceDetailView.as_view()),
+ 
+ 
 
 ]
