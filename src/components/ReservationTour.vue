@@ -29,7 +29,7 @@ export default {
     methods:{
         chargeTour: async function () {
         let idTour = localStorage.getItem("idTour");
-        axios.get(`http://127.0.0.1:8000/tour/${idTour}/`, {
+        axios.get(`https://tourguide-be.herokuapp.com/tour/${idTour}/`, {
             headers: {},
             })
             .then((result) => {

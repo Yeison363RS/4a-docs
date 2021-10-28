@@ -64,7 +64,7 @@ export default {
     processCreateTour: function () {
       this.tour.guide = localStorage.getItem("idUser");
       axios
-        .post("http://127.0.0.1:8000/c_tour/", this.tour, { headers: {} })
+        .post("https://tourguide-be.herokuapp.com/c_tour/", this.tour, { headers: {} })
         .then((result) => {
           if (result.data.confirm) {
             alert("El tour se ha guardado!!");
@@ -83,7 +83,7 @@ export default {
     },
     chargePlaces: function () {
       axios
-        .get(`http://127.0.0.1:8000/all_places/`, { headers: {} })
+        .get(`https://tourguide-be.herokuapp.com/all_places/`, { headers: {} })
         .then((result) => {
           this.datas = result.data;
           this.loaded = true;
@@ -94,7 +94,7 @@ export default {
     },
     processcreatePlace: function () {
       axios
-        .post("http://127.0.0.1:8000/c_place/", this.place, { headers: {} })
+        .post("https://tourguide-be.herokuapp.com/c_place/", this.place, { headers: {} })
         .then((result) => {
           if (result.data.confirm) {
             alert("El lugar se ha guardado!!");

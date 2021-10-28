@@ -47,7 +47,7 @@ export default {
     },
     methods: {
         chargeTours: function(){
-             axios.get(`http://127.0.0.1:8000/all_tours/`,
+             axios.get(`https://tourguide-be.herokuapp.com/all_tours/`,
               {headers: {}})
                 .then((result) => {
                     this.datas = result.data;
