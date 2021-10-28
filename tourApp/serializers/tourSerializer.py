@@ -29,14 +29,14 @@ class TourSerializer(serializers.ModelSerializer):
                 'description': tour.description,
                 'typeTour': tour.typeTour,
                 'guide': {
-                'id': guide.id,
-                'name': guide.name,
-                'surename': guide.surename,
-                'telephone': guide.telephone
+                    'id': guide.id,
+                    'name': guide.name,
+                    'surename': guide.surename,
+                    'telephone': guide.telephone
                 },
                 'place': {
-                'id': place.id,
-                'name': place.namePlace,
+                    'id': place.id,
+                    'name': place.namePlace,
                 }
             }
             

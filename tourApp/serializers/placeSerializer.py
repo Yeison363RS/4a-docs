@@ -4,4 +4,4 @@ from rest_framework import serializers
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ['namePlace']
+        fields = ['id','namePlace']

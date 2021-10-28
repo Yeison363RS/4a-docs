@@ -27,8 +27,12 @@ urlpatterns = [
 
  path('guide/<int:pk>/', views.GuideDetailView.as_view()),
  path('tourist/<int:pk>/', views.TouristDetailView.as_view()),
+ path('user/<int:pk>/', views.UserDetailView.as_view()),
  path('place/<int:pk>/', views.PlaceDetailView.as_view()),
  path('tour/<int:pk>/', views.TourDetailView.as_view()),
  path('reservation/<int:pk>/', views.ReservationDetailView.as_view()),
+
+ path('all_tours/', views.AllToursDetailView.as_view()),
+ path('all_places/', views.AllPlaceDetailView.as_view()),
 
 ]

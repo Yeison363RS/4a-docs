@@ -9,3 +9,7 @@ from .guideDetailView import GuideDetailView
 from .touristDetailView import TouristDetailView
 from .placeDetailView import PlaceDetailView
 from .reservationDetailView import ReservationDetailView
+from .userDetailView import UserDetailView
+
+from .allToursDetailView import AllToursDetailView
+from .allPlaceDetailView import AllPlaceDetailView
