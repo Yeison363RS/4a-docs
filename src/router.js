@@ -8,6 +8,8 @@ import SearchTour from './components/SearchTour.vue'
 import ProfileGuide from './components/ProfileGuide.vue'
 import AddTour from './components/AddTour.vue'
 import Reservation from './components/ReservationTour.vue'
+import LoadReservation from './components/Reservations.vue'
+import LoadReservationT from './components/TouristReservations.vue'
 
 
 const routes = [{
@@ -49,7 +51,17 @@ const routes = [{
         path: '/user/Tour',
         name: "reservationTour",
         component: Reservation
-    }
+    },
+    {
+        path: '/user/Reservations',
+        name: "loadReservations",
+        component: LoadReservation
+    },  
+    {
+        path: '/user/ReservationsT',
+        name: "loadReservationsT",
+        component: LoadReservationT
+    }    
 ];
 
 const router = createRouter({

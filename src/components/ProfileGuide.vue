@@ -89,7 +89,7 @@ export default {
       let token = localStorage.getItem("token_access");
       let userId = localStorage.getItem("idUser");
       axios
-        .get(`https://tourguide-be.herokuapp.com/guide/${userId}/`, {
+        .get(`http://127.0.0.1:8000/guide/${userId}/`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((result) => {
@@ -109,7 +109,7 @@ export default {
         });
     },
     verifyToken: function () {
-            return axios.post("https://tourguide-be.herokuapp.com/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
+            return axios.post("http://127.0.0.1:8000/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
 				.then((result) => {
 					localStorage.setItem("token_access", result.data.access);		
 				})

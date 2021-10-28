@@ -2,19 +2,37 @@
     <div class="details">
     <h3>{{title}}</h3>
     <label>Valor del tour: {{costo}}</label>
-    <label>Descripcion del tour</label>
+    <br>
+    <label>Descripcion del tour:</label>
     <p>{{description}}</p>
     <label>Tipo de turismo: {{typeTour}}</label>
-    <label>Informacion del guia</label>
-    <label>Numero telefonico: {{telephone}}</label>
+    <br>
     <label>Lugar del tour: {{namePlace}}</label>
+    <br>
+    <label><strong> Informacion del guia</strong></label>
+    <br>
+    <label>Nombre: {{nameGuide}}</label>
+    <br>
+    <label>Numero telefonico: {{telephone}}</label>
+    <form v-on:submit.prevent="addReservation">
+
+        <p> Seleccione fecha y hora de la reservacion:
+            <br>
+            <input type="datetime-local" v-model="reservation.time" >
+        </p>
+        <p>ingrese el numero de horas de servicio que quiere reservar:
+            <br> 
+            <input type="number" v-model="reservation.numberHours" >
+        </p>
+        <input type="submit">
+    </form>
     </div>
 </template>
 <script>
 import axios from 'axios';
 export default {
     name: "Reservation",
-    datas:function(){
+    data:function(){
         return{
             title:"",
             costo:"",
@@ -23,13 +41,19 @@ export default {
             nameGuide:"",
             telephone:"",
             namePlace:"",
-            tourCharge:false
+            tourCharge:false,
+            reservation:{
+                tour:"",
+                tourist:"",
+                numberHours:0,
+                time:""
+            }
         };
     },
     methods:{
-        chargeTour: async function () {
+        chargeTour: function () {
         let idTour = localStorage.getItem("idTour");
-        axios.get(`https://tourguide-be.herokuapp.com/tour/${idTour}/`, {
+        axios.get(`http://127.0.0.1:8000/tour/${idTour}/`, {
             headers: {},
             })
             .then((result) => {
@@ -45,6 +69,23 @@ export default {
             .catch(() => {
             this.$emit("logOut");
             });
+        },
+        addReservation: function(){
+            this.reservation.tour = localStorage.getItem("idTour");
+            this.reservation.tourist=localStorage.getItem("idUser");
+            axios.post("https://tourguide-be.herokuapp.com/c_reservation/", this.reservation, { headers: {} })
+        .then((result) => {
+          if (result.data.confirm) {
+            alert("Se ha realizado la reserva del tour!!");
+            this.$router.push({name: "search"});
+          } else {
+            alert("no se realizado la reserva :( ");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ERROR: Fallo en el registro.");
+        });
         }
     },
     created: function () {

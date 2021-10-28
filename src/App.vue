@@ -5,7 +5,7 @@
       <nav>
         <button v-if="loadedUser " v-on:click="loadHome">Inicio</button>
         <button v-if="loadedUser && tourist=='true'" v-on:click="loadSearch">Buscar Tours</button>
-        <button v-if="loadedUser && tourist=='true'">Reservaciones</button>
+        <button v-if="loadedUser" v-on:click="loadReservations">Reservaciones</button>
         <button v-if="loadedUser && tourist=='false'" v-on:click="loadAddTour">Crear Tour</button>
         <button v-if="loadedUser && tourist=='false'" v-on:click="loadProfileGuide" >Perfil</button>
         <button v-if="loadedUser" v-on:click="logOut">Cerrar Sesión</button>
@@ -65,7 +65,7 @@ export default {
       
       let token = localStorage.getItem("token_access");
       let userId = jwt_decode(token).user_id.toString();
-      axios.get(`https://tourguide-be.herokuapp.com/user/${userId}/`, {
+      axios.get(`http://127.0.0.1:8000/user/${userId}/`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((result) => {
@@ -84,7 +84,13 @@ export default {
     loadLogIn: function () {
       this.$router.push({ name: "logIn" });
     },
-
+    loadReservations:function(){
+      if(this.tourist=='false'){
+        this.$router.push({ name: "loadReservations" });
+      }else{
+        this.$router.push({ name: "loadReservationsT" });
+      }
+    },
     loadSignUp: function () {
       this.$router.push({ name: "signUp" });
     },
