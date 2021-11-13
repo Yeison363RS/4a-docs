@@ -26,11 +26,6 @@ SECRET_KEY = 'django-insecure-ehs8s^(z2in!kv9wtsx28&@kt)a*!zq=#ztal17!rqxb129(lb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,14 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'tourApp',
-    'corsheaders',
 ]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME' :timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME' :timedelta(days=1),
     'ROTATE_REFRESH_TOKENS' : False,
-    'BLACKLIST_AFTER_ROTATION' : True,
+    'BLACKLIST_AFTER_ROTATION' : False,
     'UPDATE_LAST_LOGIN' : False,
     'ALGORITHM' : 'HS256',
     'USER_ID_FIELD' : 'id',
@@ -66,14 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
-CORS_ALLOWED_ORIGINS = [
- "https://example.com",
- "https://sub.example.com",
- "http://localhost:8080",
- "http://127.0.0.1:9000",
-]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' :(
         'rest_framework.permissions.AllowAny', 
@@ -111,10 +99,10 @@ WSGI_APPLICATION = 'tourProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd4tf7ees7q3mnt',
-        'USER': 'seofxvlkjxwwnn',
-        'PASSWORD': '73da4370e6694f793231871fe8633303d503365f28e82d4019786825894f3599',
-        'HOST': 'ec2-35-175-17-88.compute-1.amazonaws.com',
+        'NAME': 'dd521qkhoo44no',
+        'USER': 'wvqdokvethbwlq',
+        'PASSWORD': '299c0923e1d01f3b5074eda5c32ccf9793c8568d474a584443c807eb22e78028',
+        'HOST': 'ec2-23-23-133-10.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
