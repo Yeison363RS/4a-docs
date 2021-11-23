@@ -26,10 +26,6 @@ SECRET_KEY = 'django-insecure-ehs8s^(z2in!kv9wtsx28&@kt)a*!zq=#ztal17!rqxb129(lb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-CORS_ALLOW_ALL_ORIGINS = True
-
 
 # Application definition
 
@@ -42,18 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'tourApp',
-    'corsheaders',
 ]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME' :timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME' :timedelta(days=1),
     'ROTATE_REFRESH_TOKENS' : False,
-    'BLACKLIST_AFTER_ROTATION' : True,
     'UPDATE_LAST_LOGIN' : False,
     'ALGORITHM' : 'HS256',
-    'USER_ID_FIELD' : 'id',
-    'USER_ID_CLAIM' : 'user_id',
 }
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
@@ -65,15 +57,9 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
-CORS_ALLOWED_ORIGINS = [
- "https://example.com",
- "https://sub.example.com",
- "http://localhost:8080",
- "http://127.0.0.1:9000",
-]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' :(
         'rest_framework.permissions.AllowAny', 
@@ -82,7 +68,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-AUTH_USER_MODEL = 'tourApp.User'
 
 ROOT_URLCONF = 'tourProject.urls'
 
@@ -111,10 +96,10 @@ WSGI_APPLICATION = 'tourProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd4tf7ees7q3mnt',
-        'USER': 'seofxvlkjxwwnn',
-        'PASSWORD': '73da4370e6694f793231871fe8633303d503365f28e82d4019786825894f3599',
-        'HOST': 'ec2-35-175-17-88.compute-1.amazonaws.com',
+        'NAME': 'd4kepf0j97spkq',
+        'USER': 'azchkiuruuqcib',
+        'PASSWORD': 'b5b6629520dcd259b17dc9197bb26efa5056ff75cf78d0ad75e72f4409c8e5b0',
+        'HOST': 'ec2-23-23-133-10.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -162,5 +147,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-import django_heroku
-django_heroku.settings(locals())
+#import django_heroku
+#django_heroku.settings(locals())
