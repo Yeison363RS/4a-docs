@@ -1,0 +1,5 @@
+com/guideMS/reservations/models/Reservation.class
+com/guideMS/reservations/exceptions/ReservationNotFoundAdvice.class
+com/guideMS/reservations/controllers/ReservationController.class
+com/guideMS/reservations/repositories/ReservationRepository.class
+com/guideMS/reservations/exceptions/ReservationNotFoundException.class

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.guideMS.reservations.ReservationsApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.295 s - in com.guideMS.reservations.ReservationsApplicationTests

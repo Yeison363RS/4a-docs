@@ -1,7 +1,9 @@
 package com.guideMS.reservations.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,25 +17,39 @@ import com.guideMS.reservations.repositories.ReservationRepository;
 @RestController
 public class ReservationController {
 	private final ReservationRepository reservationRepository;
-	public ReservationController (ReservationRepository reservationRepository) {
-		this.reservationRepository=reservationRepository;
+
+	public ReservationController(ReservationRepository reservationRepository) {
+		this.reservationRepository = reservationRepository;
 	}
-	
+
 	@GetMapping("/reservation/{id}")
-	Reservation getReservation(@PathVariable String id) {
-		return reservationRepository.findById(id).orElseThrow(()->
-		new ReservationNotFoundException("no se ha encontrado la reserva buscada"));
+	public Reservation getReservation(@PathVariable String id) {
+		return reservationRepository.findById(id)
+				.orElseThrow(() -> new ReservationNotFoundException("no se ha encontrado la reserva buscada"));
 	}
+
 	@GetMapping("/reservationsTour/{idtour}")
-	List<Reservation> getReservationsTour(@PathVariable String idtour) {
+	public List<Reservation> getReservationsTour(@PathVariable String idtour) {
 		return reservationRepository.findBytourId(idtour);
 	}
+
 	@GetMapping("/reservationsT/{idtourist}")
-	List<Reservation> getReservationsTourist(@PathVariable String idtourist) {
+	public List<Reservation> getReservationsTourist(@PathVariable String idtourist) {
 		return reservationRepository.findBytouristId(idtourist);
 	}
+
 	@PostMapping("/c_reservation")
-	Reservation newReservation(@RequestBody Reservation reservation) {
+	public Reservation newReservation(@RequestBody Reservation reservation) {
 		return reservationRepository.save(reservation);
+	}
+
+	@DeleteMapping("/deleteR/{id}")
+	public String deleteReservation(@PathVariable String id) {
+		Reservation reservation = reservationRepository.findById(id).orElse(null);
+		if(reservation!=null) {
+			reservationRepository.deleteById(id);
+			return "true";
+		}
+		throw new ReservationNotFoundException("No se encontro la reservacion con id:" + id);
 	}
 }
