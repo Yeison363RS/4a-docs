@@ -1,16 +1,15 @@
-const placeResolver={
+const placesResolver={
     Query:{
-        placeById: (_,{placeId},{dataSources})=>{
-            return dataSources.tourAPI.placeById(placeId);
-        },
-        allPlaces: (_,{dataSources})=>{
-            return dataSources.tourAPI.allPlaces();
-        }            
+        placeById: (_,{placeId},{dataSources})=>
+            dataSources.placeAPI.placesById(placeId),
+        allPlaces: (_,{userId},{dataSources})=>
+            dataSources.placeAPI.getAllPlaces(),
+       
     },
     Mutation:{
         createPlace:async(_,{placeInput},{dataSources})=>{
-            return await dataSources.tourAPI.createPlace(placeInput);
+            return await dataSources.placeAPI.createPlaces(placeInput);
         },
     }
 }
-module.exports= placeResolver;
+module.exports= placesResolver;

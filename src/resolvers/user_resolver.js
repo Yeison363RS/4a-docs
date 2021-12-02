@@ -1,19 +1,13 @@
 const usersResolver = {
     Query:{
-        userDetailById:(_,{userId},{dataSources,userIdToken})=>{
-            if(userId==userIdToken)
-                return dataSources.userAPI.getUser(userId)
-            else
-                return null
-        },
+        userDetailById:(_,{userId},{dataSources,userIdToken})=>
+            dataSources.userAPI.getUser(userId),
+        
         guideDetailById:(_,{userId},{dataSources,userIdToken})=>
             dataSources.userAPI.getGuide(userId),
-        touristDetailById:(_,{userId},{dataSources,userIdToken})=>{
-            if(userId==userIdToken)
-                return dataSources.userAPI.getTourist(userId)
-            else
-                return null
-        }
+
+        touristDetailById:(_,{userId},{dataSources,userIdToken})=>    
+            dataSources.userAPI.getTourist(userId)
     },
     Mutation:{
         signUpGuide:async(_,{userInput},{dataSources})=>{

@@ -1,7 +1,7 @@
 const {gql}=require('apollo-server');
 
 const reservationTypeDefs = gql `
-	type Tourist{
+	type Tourist_Reservation{
 		id:Int!
 		name:String!
 		surename:String!
@@ -9,11 +9,11 @@ const reservationTypeDefs = gql `
 		nacionality:String!
 	}
 
-	type Tour{
+	type Tour_Reservation{
 		id:Int!
 		title:String!
 		costo:Int!
-		descripcion:String!
+		description:String!
 		typeTour:String!
 		guide:Int!
 		nameGuide:String!
@@ -22,29 +22,30 @@ const reservationTypeDefs = gql `
 
 	type ReservationDetail{
 		id:String!
-		name:String!
 		numberHours:Int!
 		time:String!
-		tourist:Tourist!
-		tour:Tour!
+		touristId:String!
+		tourId:String!
+		touristdatas:Tourist_Reservation
+		tourdatas:Tour_Reservation
 	}
 	type Confirmation{
         confirm:Boolean!
     }
 	input ReservationInput{
 		numberHours:Int!
-		tourId:Int!
-		tourId:Int!
+		tourId:String!
+		touristId:String!
 		time:String!
 	}
 	extend type Mutation{
-        createReservation(reservationInput: ReservationInput): Confirmation!
-        deleteReservation(idReservation:Int!): Confirmation!
+        createReservation(reservationInput: ReservationInput): ReservationDetail!
+        deleteReservation(reservationId: String!): String!
     }
     extend type Query{
-        reservationByIdTour(tourId:Int!): [ReservationDetail!]
-        reservationByIdTourist(touristId:Int!): [ReservationDetail!]
-        reservationById(reservationId:Int!): ReservationDetail!
+        reservationByIdTour(tourId: Int!): [ReservationDetail!]
+        reservationByIdTourist(touristId: Int!): [ReservationDetail!]
+        reservationById(reservationId: String!): ReservationDetail!
     }
-	`;
+	`
     module.exports=reservationTypeDefs;

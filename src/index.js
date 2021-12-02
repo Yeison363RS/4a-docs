@@ -15,8 +15,8 @@ const server = new ApolloServer({
     dataSources: () => ({
         userAPI : new UserAPI(),
         tourAPI : new TourAPI(),
-        placeAPI : new PlaceAPI,
-        reservationAPI: new ReservationAPI
+        placeAPI : new PlaceAPI(),
+        reservationAPI: new ReservationAPI(),
     }),
     introspection:true,
     playground:true

@@ -13,14 +13,16 @@ const tourTypeDefs = gql `
     type Confirmation{
         confirm:Boolean!
     }
-    type Tour{
+    type TourDetail{
         id:Int!
         title: String! 
         costo: Int!
         description: String!
         typeTour: String!
-        guide:Guide!
-        place:Place
+        guide:Int!
+        place:Int!
+        guidedatas:Guide
+        placedatas:Place
     }
     input TourInput{
         title: String! 
@@ -32,11 +34,11 @@ const tourTypeDefs = gql `
     }
 
     extend type Mutation{
-        createTour(tourInput: TourInput): Confirmation!
+        createTour(tourInput: TourInput!): Confirmation!
     }
     extend type Query{
-        tourById(tourId:Int!): Tour
-        allTours: [Tour]
+        tourById(tourId:Int!): TourDetail
+        allTours(tourId:Int!): [TourDetail]
     }
     `;
     module.exports=tourTypeDefs;

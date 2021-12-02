@@ -7,16 +7,17 @@ class PlaceAPI extends RESTDataSource{
         super();
         this.baseURL = serverConfig.place_api_url;
     }
-    async createPlace(place){
+    async createPlaces(place){
         place=new Object(JSON.parse(JSON.stringify(place)));
         return await this.post('/c_place/',place);
     }
 
-    async placeById(idPlace){
-        return await this.post(`/place/${idPlace}`);
+    async placesById(idPlace){
+        return await this.get(`/place/${idPlace}/`);
     }
 
-    async allPlaces(){
-        return await this.post('/all_places/');
+    async getAllPlaces(){
+        return await this.get('/all_places/');
     }
 }
+module.exports = PlaceAPI;

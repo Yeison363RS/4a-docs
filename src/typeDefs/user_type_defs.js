@@ -83,5 +83,5 @@ const userTypeDefs = gql`
         guideDetailById(userId:Int!):GuideDetail!
         touristDetailById(userId:Int!):TouristDetail!
     }
-    `;
+    `
     module.exports = userTypeDefs;

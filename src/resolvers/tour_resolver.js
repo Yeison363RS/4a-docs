@@ -1,21 +1,20 @@
 const tourResolver={
     Query:{
         tourById: async(_,{tourId},{dataSources})=>{
-            datasTour = (await dataSources.tourAPI.tourById(tourId));
-            datasGuide = (await dataSources.userAPI.getGuide(datasTour.guide));
-            datasPlace= (await dataSources.placeAPI.placeById(datasTour.place));
+            const datasTour = (await dataSources.tourAPI.tourById(tourId));
+            const datasGuide = (await dataSources.userAPI.getGuide(datasTour.guide));
+            const datasPlace= (await dataSources.placeAPI.placesById(datasTour.place));
             return transforTour(datasTour,datasGuide,datasPlace);
         },
-
-        allTours: async(_,{dataSources})=>{
-            datasTours = (await dataSources.tourAPI.allTours());
-            datasToursExpose=[]
-            for (var datasTour in datasTours) {
-                datasGuide = (await dataSources.userAPI.getGuide(datasTour.guide));
-                datasPlace= (await dataSources.placeAPI.placeById(datasTour.place));
-                datasToursExpose.push(transforTour(datasTour,datasGuide,datasPlace))
-            }
-            return datasToursExpose;
+        allTours: async(_,{tourId},{dataSources})=>{
+            const datasTours = (await dataSources.tourAPI.allTours(tourId));
+            const datasToursExpose=[];
+            for(var i=0 in datasTours){
+                const datasGuide = (await dataSources.userAPI.getGuide(datasTours[i].guide));
+                const datasPlace= (await dataSources.placeAPI.placesById(datasTours[i].place));
+                datasToursExpose.push(await transforTour(datasTours[i],datasGuide,datasPlace));
+            }; 
+            return datasTours;
         }            
     },
 
@@ -23,20 +22,23 @@ const tourResolver={
         createTour:async(_,{tourInput},{dataSources})=>{
             return await dataSources.tourAPI.createTours(tourInput);
         },
-    }
-}
+    },
 
-function transforTour(datasTour,datasGuide,datasPlace){
-    datasTour.guide = {
+   
+}
+function  transforTour(datasTour,datasGuide,datasPlace){
+    delete datasTour.guide;
+    datasTour.guidedatas = {
         id:datasGuide.id,
         name:datasGuide.name,
         surename:datasGuide.surename,
         telephone:datasGuide.telephone 
-    }
-    datasTour.place = {
+    };
+    delete datasTour.guide;
+    datasTour.placedatas = {
         id:datasPlace.id,
         name:datasPlace.namePlace 
-    }
+    };
     return datasTour;
 }
 module.exports= tourResolver;

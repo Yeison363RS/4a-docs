@@ -13,16 +13,16 @@ class ReservationAPI extends RESTDataSource{
     }
 
     async reservationById(idReservation){
-        return await this.post(`/reservation/${idReservation}`);
+        return await this.get(`/reservation/${idReservation}/`);
     }
     async reservationByTourId(idTour){
-        return await this.post(`/reservationsTour/${idTour}`);
+        return await this.get(`/reservationsTour/${idTour}/`);
     }
     async reservationByTourisId(idTourist){
-        return await this.post(`/reservationsT/${idTourist}`);
+        return await this.get(`/reservationsT/${idTourist}/`);
     }
-    async deleteReservation(idReservation){
-        return await this.post(`/deleteR/${idReservation}`);
+    async deleteReservation(reservationId){
+        return await this.delete(`/deleteR/${reservationId}/`);
     }
 }
 

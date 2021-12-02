@@ -13,11 +13,11 @@ class TourAPI extends RESTDataSource{
     }
 
     async tourById(idTour){
-        return await this.post(`/tour/${idTour}`);
+        return await this.get(`/tour/${idTour}/`);
     }
 
-    async allTours(){
-        return await this.post('/all_tours/');
+    async allTours(idTour){
+        return await this.get('/all_tours/');
     }
 }
 
