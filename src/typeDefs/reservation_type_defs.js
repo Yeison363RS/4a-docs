@@ -43,7 +43,7 @@ const reservationTypeDefs = gql `
         deleteReservation(reservationId: String!): String!
     }
     extend type Query{
-        reservationByIdTour(tourId: Int!): [ReservationDetail!]
+        reservationByIdGuide(guideId: Int!): [ReservationDetail!]
         reservationByIdTourist(touristId: Int!): [ReservationDetail!]
         reservationById(reservationId: String!): ReservationDetail!
     }
