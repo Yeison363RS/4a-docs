@@ -5,7 +5,7 @@
             <h2 class="titleTable">Mis reservaciones Realizadas</h2>
         </div>
             <div id="table-all">
-            <table v-if="loaded">
+            <table >
                 <thead>
                     <tr>
                         <th>Titulo del tour</th>
@@ -17,19 +17,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  v-for="reser in datas" :key="reser.id" @click="SelectionReser(reser)">
-                        <td>{{reser.tour.title}}</td>
-                        <td>{{reser.tour.costo}}</td>
+                    <tr  v-for="reser in reservationByIdTourist" :key="reser.id" @click="SelectionReser(reser)">
+                        <td>{{reser.tourdatas.title}}</td>
+                        <td>{{reser.tourdatas.costo}}</td>
                         <td>{{reser.numberHours}}</td>
-                        <td>{{reser.tour.nameGuide}}</td> 
-                        <td>{{reser.tour.telephone}}</td>
+                        <td>{{reser.tourdatas.nameGuide}}</td> 
+                        <td>{{reser.tourdatas.telephone}}</td>
                         <td>{{reser.time}}</td> 
                     </tr>
                 </tbody>
             </table>
             </div>
 
-            <div class="center">
+            <div class="center" v-if="isSelected">
                 <br>
                 <h3>Reservacion selecionada</h3>
                 <h4>Nombre Tour: {{nameRes}}</h4>
@@ -40,57 +40,75 @@
     </article>
 </template>
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 export default {
   name: "LoadReservationT",
   data: function () {
     return {
-      datas: null,
-      loaded: false,
+      reservationByIdTourist: [],
       nameRes: "",
       timest: null,
       idReserv: null,
       isSelected: false,
     };
   },
+  apollo:{
+    reservationByIdTourist:{
+      query:gql`
+        query ($touristId: Int!){
+          reservationByIdTourist(touristId: $touristId){
+            id
+            numberHours
+            time
+            touristdatas {
+              id
+              name
+            }
+            tourdatas {
+              nameGuide
+              telephone
+              title
+              costo
+              id
+              description
+            }
+          }
+        }
+      `,
+      variables(){
+        return{
+          touristId:localStorage.getItem("idUser")
+        }
+      }
+    }
+  },
   methods: {
-    chargeReservations: function () {
-      let userId = localStorage.getItem("idUser");
-      axios
-        .get(`https://tourguide-be.herokuapp.com/reservationsT/${userId}/`, {
-          headers: {},
-        })
-        .then((result) => {
-          this.datas = result.data;
-          this.loaded = true;
-        })
-        .catch(() => {
-          this.$emit("logOut");
-        });
-    },
     SelectionReser: function (reserv) {
-      this.isSelected = true;
-      this.nameRes = reserv.tour.title;
+      this.nameRes = reserv.tourdatas.title;
       this.timest = reserv.time;
       this.idReserv = reserv.id;
+      this.isSelected = true;
     },
-    processCancel: function () {
-    
-      axios.delete(`https://tourguide-be.herokuapp.com/deleteR/${this.idReserv}/`, {
-          headers: {},
-        })
-        .then((result) => {
-            alert("Se a cancelado la reserva");
-            this.chargeReservations();
 
-        })
-        .catch(() => {
-          this.$emit("logOut");
+    processCancel: async function () {
+      await this.$apollo
+        .mutate({
+          mutation:gql`
+            mutation($reservationId: String!){
+              deleteReservation(reservationId: $reservationId)
+            }
+          `,
+          variables:{
+            reservationId:this.idReserv
+          },
+        }).then((result)=>{
+          console.log(result.data.deleteReservation);
+          alert("Se a cancelado la reserva");
+        }).catch((error)=>{
+          console.log(error);
+          alert("No se ha podido realizar la cncelacion de la reserva");
         });
     },
-  },
-  created: function () {
-    this.chargeReservations();
   },
 };
 </script>

@@ -1,23 +1,24 @@
 <template>
     <div class="details">
-        <h2>{{title}}</h2>
+        <h2>{{tourById.title}}</h2>
         <ul>       
             <li><b>
-                Valor del tour: </b> <i>{{costo}}</i>
+                Valor del tour: </b> <i>{{tourById.costo}}</i>
             </li>
         <div class="background-details">
             <li><h3>Descripcion del tour</h3></li>
             <ul>
-                <li><p>{{description}}</p></li>
-                <li>Tipo de turismo: <i>{{typeTour}}</i> </li>
+                <li><p>{{tourById.description}}</p></li>
+                <li>Tipo de turismo: <i>{{tourById.typeTour}}</i> </li>
             </ul>
         </div>
 
         <div class="background-details">
             <li><h3>Informacion del guia</h3></li>
             <ul>
-                <li>Numero telefonico: <i>{{telephone}}</i> </li>
-                <li>Lugar del tour: <i>{{namePlace}}</i> </li>   
+                <li>Numero telefonico: <i>{{tourById.guidedatas.telephone}}</i> </li>
+                <li>Nombre del guia: <i>{{tourById.guidedatas.name}}{{tourById.guidedatas.surename}}</i> </li>
+                <li>Lugar del tour: <i>{{tourById.placedatas.namePlace}}</i> </li>   
             </ul>
         </div>
         </ul>
@@ -36,67 +37,81 @@
 </div>
 </template>
 <script>
-import axios from 'axios';
+import gql from 'graphql-tag';
 export default {
     name: "Reservation",
     data:function(){
         return{
-            title:"",
-            costo:"",
-            description:"",
-            typeTour:"",
-            nameGuide:"",
-            telephone:"",
-            namePlace:"",
-            tourCharge:false,
+            tourById:{
+                id:0,
+                title:"",
+                costo:"",
+                description:"",
+                typeTour:"",
+                guidedatas :{
+                    id:0,                    
+                    name:"",
+                    surename:"",
+                    telephone:"",
+                },
+                placedatas :{
+                name:""
+                }
+            },
             reservation:{
-                tour:"",
-                tourist:"",
-                numberHours:0,
-                time:""
+                numberHours: 0,
+                tourId: "",
+                touristId: "",
+                time: ""
             }
         };
     },
-    methods:{
-        chargeTour: function () {
-        let idTour = localStorage.getItem("idTour");
-        axios.get(`https://tourguide-be.herokuapp.com/tour/${idTour}/`, {
-            headers: {},
-            })
-            .then((result) => {
-            this.title=result.data.title;
-            this.costo=result.data.costo;
-            this.description=result.data.description;
-            this.typeTour=result.data.typeTour;
-            this.nameGuide=result.data.guide.name+" "+result.data.guide.surename;
-            this.telephone=result.data.guide.telephone;
-            this.namePlace=result.data.place.name;
-            this.tourCharge=true;
-            })
-            .catch(() => {
-            this.$emit("logOut");
-            });
-        },
-        addReservation: function(){
-            this.reservation.tour = localStorage.getItem("idTour");
-            this.reservation.tourist=localStorage.getItem("idUser");
-            axios.post("https://tourguide-be.herokuapp.com/c_reservation/", this.reservation, { headers: {} })
-        .then((result) => {
-          if (result.data.confirm) {
-            alert("Se ha realizado la reserva del tour!!");
-            this.$router.push({name: "search"});
-          } else {
-            alert("no se realizado la reserva :( ");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ERROR: Fallo en el registro.");
-        });
+    apollo:{
+        tourById:{
+            query:gql`
+            query($tourId: Int!){
+                tourById(tourId: $tourId){
+
+                }
+            }
+            `,
+            variables(){
+                return{
+                    tourId:localStorage.getItem("idTour")
+                }
+            },
         }
     },
-    created: function () {
-        this.chargeTour();
+    methods:{
+        addReservation: async function(){
+            this.reservation.tour = this.tourById.id;
+            this.reservation.tourist=localStorage.getItem("idUser");
+            await this.$apollo
+            .mutate({
+                mutation:gql`
+                    mutation($reservationInput: ReservationInput){
+                        createReservation(reservationInput: $reservationInput){
+                            id
+                            numberHours
+                            time
+                        }
+                    }
+                `,
+                variables:{
+                    reservationInput:this.reservation
+                },
+            })
+            .then((result)=>{
+                if(result.data.createReservation.id != ""){
+                    alert("Se ha realizado la reserva del tour!!");
+                    this.$emit("loadSearch");
+                }
+            }).catch((error)=>{
+                console.log(error);
+                alert("ERROR: Fallo en el registro.");
+            });
+        }
+            
     },
 }
 </script>

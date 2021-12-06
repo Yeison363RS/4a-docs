@@ -13,15 +13,19 @@
         <div id="head-content">
           <img src="../assets/profile.jpg" />
           <div id="head-info">
-            <h3 class="head-info">{{nameu}}</h3>
-            <h3 class="head-info">{{type_user}} en Colombia</h3>
+            <h3 class="head-info">
+              {{ guideDetailById.name }} {{ guideDetailById.surename }}
+            </h3>
+            <h3 class="head-info">
+              {{ guideDetailById.type_user }} en Colombia
+            </h3>
           </div>
         </div>
 
         <div id="head-link">
-          <a href="#">{{email}} </a>
-          
-          <h3>telefono :{{telephone}}</h3>
+          <a href="#">{{ guideDetailById.email }} </a>
+
+          <h3>telefono :{{ guideDetailById.telephone }}</h3>
         </div>
         <img />
       </div>
@@ -43,14 +47,18 @@
         <h3>Sobre mi</h3>
         <div id="body-aboutMe">
           <p>
-            {{description}}
+            {{ guideDetailById.description }}
           </p>
-          <p>Calificacion general {{score}}</p>
-           <p>Nombre de la agencia {{nameAgency}}</p>
+          <p>Calificacion general {{ guideDetailById.score }}</p>
+          <p>Nombre de la agencia {{ guideDetailById.nameAgency }}</p>
         </div>
         <div id="body-socialMedia">
-          <a href="{{facebook}}"><img src="../assets/facebook.png" /></a>
-          <a href="{{instagram}}"><img src="../assets/instagram.png" /></a>
+          <a href="{{guideDetailById.facebook}}"
+            ><img src="../assets/facebook.png"
+          /></a>
+          <a href="{{guideDetailById.instagram}}"
+            ><img src="../assets/instagram.png"
+          /></a>
           <a href="#"><img src="../assets/twitter.png" /></a>
           <a href="#"><img src="../assets/whatsapp.png" /></a>
         </div>
@@ -59,67 +67,55 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 export default {
   name: "ProfileGuide",
+
   data: function () {
     return {
-        profileCharge:false,
-        nameu: "",
+      userId: localStorage.getItem("idUser"),
+      guideDetailById: {
+        id: "",
+        password: "",
+        name: "",
+        surename: "",
         email: "",
         telephone: "",
-        score:0,
-        type_user:"",
-        nameAgency:"",
-        description:"",
-        facebook:"",
-        instagram:"",
+        score: 0,
+        type_user: "",
+        name_agency: "",
+        description: "",
+        facebook: "",
+        instagram: "",
+      },
     };
   },
-  methods: {
-    chargeProfile: async function () {
-      if (
-        localStorage.getItem("token_access") === null ||
-        localStorage.getItem("token_refresh") === null
-      ) {
-        this.$emit("logOut");
-        return;
-      }
-    await this.verifyToken();
-      let token = localStorage.getItem("token_access");
-      let userId = localStorage.getItem("idUser");
-      axios
-        .get(`https://tourguide-be.herokuapp.com/guide/${userId}/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((result) => {
-        this.nameu=localStorage.getItem("name") +" "+ result.data.surename;
-        this.email=localStorage.getItem("email")
-        this.telephone=result.data.telephone;
-        this.score=result.data.score;
-        this.nameAgency=result.data.name_agency;
-        this.description=result.data.description;
-        this.facebook=result.data.facebook;
-        this.instagram=result.data.instagram
-        this.type_user=localStorage.getItem("tourist")=="false" ? "Guia":"Turista";
-        this.profileCharge=true;
-        })
-        .catch(() => {
-          this.$emit("logOut");
-        });
+  apollo: {
+    guideDetailById: {
+      query: gql`
+          query($userId: Int!){
+            guideDetailById(userId: $userId){
+              id
+              password
+              name
+              surename
+              email
+              telephone
+              score
+              type_user
+              name_agency
+              description
+              facebook
+              instagram
+            }
+          }
+      `,
+      variables() {
+        return {
+          userId: this.userId,
+        };
+      },
     },
-    verifyToken: function () {
-            return axios.post("https://tourguide-be.herokuapp.com/refresh/", {refresh: localStorage.getItem("token_refresh")}, {headers: {}})
-				.then((result) => {
-					localStorage.setItem("token_access", result.data.access);		
-				})
-				.catch(() => {
-					this.$emit('logOut');
-				});
-        }
-  },
-  created: function () {
-    this.chargeProfile();
   },
 };
 </script>

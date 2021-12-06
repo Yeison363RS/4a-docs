@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import gql from 'graphql-tag';
 
 export default {
     name: "LogIn",
@@ -42,27 +42,31 @@ export default {
         }
     },
     methods: {
-        processLogInUser: function(){
-            axios.post(
-                "https://tourguide-be.herokuapp.com/login/", 
-                this.user,  
-                {headers: {}}
-                )
-                .then((result) => {
-                    let dataLogIn = {
-                        email: this.user.email,
-                        token_access: result.data.access,
-                        token_refresh: result.data.refresh,
+        processLogInUser: async function(){
+            await this.$apollo
+            .mutate({
+                mutation:gql`
+                    mutation($credentials: CredentialsInput!){
+                        logIn(credentials: $credentials){
+                            refresh
+                            access
+                        }
                     }
-                    
-                    this.$emit('completedLogIn', dataLogIn)
-                })
-                .catch((error) => {
-                    
-                    if (error.response.status == "401")
-                        alert("ERROR 401: Credenciales Incorrectas.");
-                    
-                });
+                `,
+                variables:{
+                    credentials:this.user,
+                },
+            }).then((result)=>{
+                let dataLogIn = {
+                    email: this.user.email,
+                    token_access: result.data.logIn.access,
+                    token_refresh: result.data.logIn.refresh,
+                }
+                this.$emit('completedLogIn', dataLogIn)
+            }).catch((error)=>{
+                if (error.response.status == "401")
+                    alert("ERROR 401: Credenciales Incorrectas.");
+            });
         },
 
         loadSignUp: function(){

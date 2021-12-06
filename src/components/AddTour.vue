@@ -63,7 +63,7 @@
     </article>
 </template>
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 export default {
   name: "AddTour",
   data: function () {
@@ -77,7 +77,7 @@ export default {
         guide: 2,
         title: "",
         description: "",
-        costo: "",
+        costo: 0,
         typeTour: "Tradicional",
       },
       place: {
@@ -86,51 +86,107 @@ export default {
     };
   },
   methods: {
-    processCreateTour: function () {
-      this.tour.guide = localStorage.getItem("idUser");
-      axios
-        .post("https://tourguide-be.herokuapp.com/c_tour/", this.tour, { headers: {} })
-        .then((result) => {
-          if (result.data.confirm) {
-            alert("El tour se ha guardado!!");
-          } else {
-            alert("no se ha guardado");
+    validateLogin: async function(){
+      await this.apollo
+      .mutate({
+        mutation: gql`
+        mutation($refresh: String!){
+          refreshToken(refresh: $refresh){
+            access
           }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ERROR: Fallo en el registro.");
-        });
+        }
+      `,
+      variables:{
+        refresh:localStorage.getItem("token_refresh"),
+      },
+      }).then(result=>{
+        localStorage.setItem("token_access",result.data.refreshToken.access);
+        return true;
+      }).catch((error)=>{
+        return false;
+      });
+    },
+    processCreateTour: async function () {
+      this.tour.guide = localStorage.getItem("idUser");
+      if(localStorage.getItem("token_access")===null || 
+          localStorage.getItem("token_refresh")===null){
+            this.$emit("logOut");
+            return;
+          }
+      if(!validateLogin()){
+        this.$emit("logOut");
+        return;
+      }
+      await this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($tourInput: TourInput!){
+            createTour(tourInput: $tourInput)
+            confirm
+          }
+        `,
+        variables: {
+          tourInput:this.tour,
+        }
+      }).then((result)=>{
+        if (result.data.createTour.confirm) {
+          alert("El tour se ha guardado!!");
+        } else {
+          alert("no se ha guardado");
+        }
+      }).catch((error)=>{
+        console.log(error);
+        alert("ERROR: Fallo en el registro.");
+      });
     },
     SelectionPlace: function (pla) {
       this.tour.place = pla.id;
       this.nameP = pla.namePlace;
     },
-    chargePlaces: function () {
-      axios
-        .get(`https://tourguide-be.herokuapp.com/all_places/`, { headers: {} })
-        .then((result) => {
-          this.datas = result.data;
-          this.loaded = true;
-        })
-        .catch(() => {
-          alert("No ha sido posible cargar la lista de lugares");
-        });
-    },
-    processcreatePlace: function () {
-      axios
-        .post("https://tourguide-be.herokuapp.com/c_place/", this.place, { headers: {} })
-        .then((result) => {
-          if (result.data.confirm) {
-            alert("El lugar se ha guardado!!");
-          } else {
-            alert("no se ha guardado");
+    getQueryAllPlaces: function(){
+      return {
+        query: gql`
+          query ($userId: Int!) {
+            allPlaces(userId: $userId) {
+              id
+              namePlace
+            }
           }
+        `,
+        variable: {
+          userId: 2,
+        },
+      };
+    },
+    chargePlaces: async function () {
+      await this.$apollo
+        .query(getQueryAllPlaces())
+        .then((result) => {
+          this.datas=result.data.allPlaces;
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR: Fallo en el registro.");
+          alert("No ha sido posible cargar la lista de lugares");
         });
+    },
+    processcreatePlace: async function () {
+      await this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($placeInput: PlaceInput!){
+            createPlace(placeInput: $placeInput)
+            confirm
+          }
+        `,
+        variables: {
+          placeInput:this.place,
+        }
+      }).then((result)=>{
+        alert("El lugar se ha guardado!!");
+      }).catch((error)=>{
+        console.log(error);
+        alert("ERROR: Fallo en el registro del lugar.");
+      });
     },
   },
 };
